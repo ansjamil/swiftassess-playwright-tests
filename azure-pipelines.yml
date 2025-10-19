@@ -1,7 +1,5 @@
 trigger:
   - main
-pr:
-  - main
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -26,10 +24,9 @@ steps:
     condition: succeededOrFailed()
     inputs:
       testResultsFormat: 'JUnit'
-      testResultsFiles: 'test-results/results.xml'
-      testRunTitle: 'Playwright E2E Tests'
+      testResultsFiles: '**/test-results/**/*.xml'
       failTaskOnFailedTests: true
-    displayName: 'Publish Test Results (JUnit XML)'
+    displayName: 'Publish Test Results'
 
   - task: PublishPipelineArtifact@1
     condition: succeededOrFailed()
@@ -38,11 +35,3 @@ steps:
       artifact: 'playwright-report'
       publishLocation: 'pipeline'
     displayName: 'Upload Playwright HTML Report'
-
-  - task: PublishPipelineArtifact@1
-    condition: succeededOrFailed()
-    inputs:
-      targetPath: 'test-results'
-      artifact: 'test-results'
-      publishLocation: 'pipeline'
-    displayName: 'Upload Raw Results & Screenshots'
